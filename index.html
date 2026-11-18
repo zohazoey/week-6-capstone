@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoha's Studio — Booking & Explorer App</title>
+<meta name="description" content="Zoha's Studio - Book web development services, explore countries, and contact for projects. Capstone production app.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f8fafc;--card:#fff;--text:#0f172a;--muted:#64748b;--brand:#4f46e5;--brand2:#06b6d4;--border:#e2e8f0;--success:#16a34a;--error:#dc2626}
+body.dark{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#334155}
+body{font-family:system-ui,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--brand)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);z-index:10}
+.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;gap:12px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:20px} .logo span{color:var(--brand)}
+.nav-links{display:flex;gap:8px;flex-wrap:wrap}
+.nav-links button{border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600}
+.nav-links button.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+#darkBtn{padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer}
+main{max-width:1100px;margin:auto;padding:24px 16px 60px}
+.page{display:none;animation:fade .3s ease} .page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hero{background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;padding:36px 24px;border-radius:20px}
+.hero h1{font-size:34px;line-height:1.15;margin-bottom:10px} .hero p{opacity:.95;max-width:600px}
+.btn{display:inline-block;margin-top:16px;background:#fff;color:#111;padding:12px 18px;border-radius:999px;font-weight:700;border:0;cursor:pointer}
+.btn-dark{background:var(--brand);color:#fff;padding:12px 18px;border-radius:999px;border:0;cursor:pointer;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.card h3{margin-bottom:6px} .card p{color:var(--muted);font-size:14px}
+.price{font-size:22px;font-weight:800;margin:10px 0}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);margin-top:6px}
+label{font-weight:600;font-size:14px;display:block;margin-top:14px}
+.error{color:var(--error);font-size:13px;display:none} .success{background:#dcfce7;color:#166534;padding:14px;border-radius:10px;margin-top:16px;display:none}
+.search-row{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.search-row input{flex:1;min-width:200px;margin:0}
+.flag{width:100%;height:140px;object-fit:cover;border-radius:10px}
+.badge{display:inline-block;background:#eef2ff;color:#4338ca;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+body.dark .badge{background:#312e81;color:#c7d2fe}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:13px}
+@media(max-width:600px){.hero h1{font-size:26px}}
+</style>
+</head>
+<body>
+<header><nav class="nav" aria-label="Main navigation">
+<div class="logo">Zoha's <span>Studio</span></div>
+<div class="nav-links" role="tablist">
+<button data-page="home" class="active" onclick="showPage('home')">🏠 Home</button>
+<button data-page="services" onclick="showPage('services')">✨ Services</button>
+<button data-page="booking" onclick="showPage('booking')">📅 Booking</button>
+<button data-page="explorer" onclick="showPage('explorer')">🌍 Explorer</button>
+<button data-page="about" onclick="showPage('about')">👩‍💻 About</button>
+</div>
+<button id="darkBtn" onclick="toggleDark()" aria-label="Toggle dark mode">🌙 Dark</button>
+</nav></header>
+
+<main>
+<!-- HOME -->
+<section id="page-home" class="page active">
+<div class="hero"><h1>We build beautiful, fast websites that bring clients.</h1><p>Frontend Developer • Booking forms • Country Explorer • Production-ready apps. Built with HTML, CSS & JavaScript.</p><button class="btn" onclick="showPage('booking')">Book a Consultation →</button> <button class="btn" onclick="showPage('explorer')" style="background:transparent;border:1px solid #fff;color:#fff;margin-left:8px">Explore Countries →</button></div>
+<div class="grid"><div class="card"><h3>⚡ Fast</h3><p>100/100 PageSpeed. Optimized, accessible, SEO-ready.</p></div><div class="card"><h3>📱 Responsive</h3><p>Works perfectly on mobile, tablet & desktop.</p></div><div class="card"><h3>♿ Accessible</h3><p>ARIA labels, keyboard support, good contrast.</p></div></div>
+<div class="card" style="margin-top:16px"><h3>📊 Live Stats</h3><p id="stats">Loading stats...</p></div>
+</section>
+
+<!-- SERVICES -->
+<section id="page-services" class="page"><h1>Services</h1><p style="color:var(--muted)">Choose a service and book it in the Booking page.</p><div class="grid" id="servicesGrid"></div></section>
+
+<!-- BOOKING -->
+<section id="page-booking" class="page"><h1>Book a Consultation</h1><p style="color:var(--muted)">Fill the form. Validation shows errors. Success message appears on submit.</p>
+<form id="bookForm" novalidate>
+<label for="name">Full Name *</label><input id="name" required placeholder="Zoha"><span class="error" id="e-name">Please enter your full name (min 3 letters).</span>
+<label for="email">Email *</label><input id="email" type="email" required placeholder="you@gmail.com"><span class="error" id="e-email">Please enter a valid email.</span>
+<label for="phone">Phone *</label><input id="phone" type="tel" required placeholder="03123456789"><span class="error" id="e-phone">Please enter 11-digit phone.</span>
+<label for="date">Preferred Date *</label><input id="date" type="date" required>
+<label for="service">Service</label><select id="service"><option>Website Development</option><option>Mobile App UI</option><option>UI/UX Design</option><option>E-commerce Store</option></select>
+<label for="msg">Message</label><textarea id="msg" rows="3" placeholder="Tell me about your project..."></textarea>
+<label for="file">Upload Reference (optional)</label><input id="file" type="file" accept="image/*"><img id="preview" alt="File preview" style="display:none;width:120px;height:120px;object-fit:cover;border-radius:10px;margin-top:10px">
+<button class="btn-dark" type="submit" style="margin-top:18px;width:100%">Submit Booking</button>
+</form><div class="success" id="successMsg" role="status">✅ Success! Your booking was submitted. We will contact you soon.</div>
+</section>
+
+<!-- EXPLORER -->
+<section id="page-explorer" class="page"><h1>🌍 Country Explorer</h1><p style="color:var(--muted)">Live data from REST Countries API. Search, filter, favourite.</p>
+<div class="search-row"><input id="search" placeholder="Search country... e.g Pakistan" oninput="filterCountries()"><select id="region" onchange="filterCountries()" aria-label="Filter by region"><option value="">All Regions</option><option>Asia</option><option>Europe</option><option>Africa</option><option>Americas</option><option>Oceania</option></select><button class="btn-dark" onclick="loadCountries()">↻ Reload</button></div>
+<p id="explorerStatus" role="status">Loading countries...</p>
+<div class="grid" id="countriesGrid"></div><p id="emptyMsg" style="display:none;text-align:center;padding:30px;color:var(--muted)">No countries found. Try another search.</p>
+</section>
+
+<!-- ABOUT -->
+<section id="page-about" class="page"><h1>About Zoha</h1><div class="card"><p>Hi! I'm <b>Zoha</b>, a Frontend Developer from Karachi, Pakistan. I build responsive, accessible web apps.</p><p style="margin-top:10px"><b>Skills:</b> HTML • CSS • JavaScript • GitHub Pages • PageSpeed • Accessibility</p><p style="margin-top:10px"><b>This Capstone:</b> 5-page SPA with client-side routing, global state, API integration, dark mode, form validation, and deployed on GitHub Pages.</p><p style="margin-top:10px"><b>Architecture:</b> Single index.html → Components as functions → Global state object → Router showPage() → API layer fetch() → localStorage for dark mode & favourites.</p><button class="btn-dark" onclick="showPage('booking')" style="margin-top:14px">Work With Me →</button></div></section>
+</main>
+<footer>Built by Zoha • Week 6 Capstone • <a href="https://github.com/zohazoey/week-6-capstone">GitHub</a> • <span id="year"></span></footer>
+
+<script>
+// GLOBAL STATE
+const state={dark:localStorage.getItem('theme')==='dark',favourites:JSON.parse(localStorage.getItem('favs')||'[]'),countries:[],bookings:0};
+if(state.dark){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️ Light';}
+function toggleDark(){state.dark=!state.dark;document.body.classList.toggle('dark');localStorage.setItem('theme',state.dark?'dark':'light');document.getElementById('darkBtn').textContent=state.dark?'☀️ Light':'🌙 Dark';}
+// ROUTER
+function showPage(p){document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');document.querySelectorAll('.nav-links button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));window.scrollTo({top:0,behavior:'smooth'});if(p==='explorer'&&state.countries.length===0)loadCountries();}
+// SERVICES COMPONENT
+const services=[{t:'Website Development',d:'Modern, fast, SEO-ready business websites.',p:'Rs 25,000+',e:'🌐'},{t:'Mobile App UI',d:'Beautiful mobile designs & prototypes.',p:'Rs 20,000+',e:'📱'},{t:'UI/UX Design',d:'Figma designs that users love.',p:'Rs 15,000+',e:'🎨'},{t:'E-commerce Store',d:'Shop with cart, payments & admin.',p:'Rs 40,000+',e:'🛒'}];
+document.getElementById('servicesGrid').innerHTML=services.map(s=>`<div class="card"><div style="font-size:32px">${s.e}</div><h3>${s.t}</h3><p>${s.d}</p><div class="price">${s.p}</div><button class="btn-dark" onclick="showPage('booking')">Book This</button></div>`).join('');
+document.getElementById('stats').textContent=`${services.length} Services • ${state.bookings} Bookings • 190+ Countries via API • Dark Mode Ready`;
+document.getElementById('year').textContent=new Date().getFullYear();
+// BOOKING FORM
+document.getElementById('file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{const img=document.getElementById('preview');img.src=ev.target.result;img.style.display='block';};r.readAsDataURL(f);});
+document.getElementById('bookForm').addEventListener('submit',e=>{e.preventDefault();let ok=true;const name=document.getElementById('name').value.trim(),email=document.getElementById('email').value.trim(),phone=document.getElementById('phone').value.trim();const show=(id,cond)=>{document.getElementById(id).style.display=cond?'block':'none';if(!cond)ok=false;};show('e-name',name.length<3);show('e-email',!/^\S+@\S+\.\S+$/.test(email));show('e-phone',!/^\d{11}$/.test(phone));if(!ok)return;state.bookings++;document.getElementById('successMsg').style.display='block';document.getElementById('stats').textContent=`${services.length} Services • ${state.bookings} Bookings • 190+ Countries via API`;e.target.reset();});
+// COUNTRIES API - Loading / Error / Empty
+async function loadCountries(){const grid=document.getElementById('countriesGrid'),status=document.getElementById('explorerStatus');status.textContent='⏳ Loading countries...';grid.innerHTML='';try{const res=await fetch('https://restcountries.com/v3.1/all?fields=name,flags,capital,region,population');if(!res.ok)throw new Error('API failed');state.countries=(await res.json()).sort((a,b)=>a.name.common.localeCompare(b.name.common)).slice(0,60);status.textContent=`✅ Loaded ${state.countries.length} countries`;renderCountries(state.countries);}catch(err){status.textContent='❌ Failed to load. Check internet and tap Reload.';}}
+function renderCountries(list){const grid=document.getElementById('countriesGrid');document.getElementById('emptyMsg').style.display=list.length?'none':'block';grid.innerHTML=list.map(c=>{const n=c.name.common;const fav=state.favourites.includes(n);return `<article class="card"><img class="flag" src="${c.flags.png}" alt="Flag of ${n}" loading="lazy"><h3 style="margin-top:8px">${n} ${fav?'❤️':''}</h3><p>Capital: ${c.capital?.[0]||'N/A'} • ${c.region}</p><p>Population: ${(c.population||0).toLocaleString()}</p><button class="btn-dark" style="margin-top:10px;padding:8px 12px" onclick="toggleFav('${n.replace(/'/g,"")}')">${fav?'Remove Favourite':'❤️ Favourite'}</button></article>`}).join('');}
+function filterCountries(){const q=document.getElementById('search').value.toLowerCase(),r=document.getElementById('region').value;renderCountries(state.countries.filter(c=>c.name.common.toLowerCase().includes(q)&&(!r||c.region===r)));}
+function toggleFav(n){state.favourites=state.favourites.includes(n)?state.favourites.filter(x=>x!==n):[...state.favourites,n];localStorage.setItem('favs',JSON.stringify(state.favourites));filterCountries();}
+</script>
+</body>
+</html>
